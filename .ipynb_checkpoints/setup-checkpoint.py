@@ -29,7 +29,7 @@ print(f"packages: {packages}")
 
 setup(
     name=NAME,
-    version='0.1.22',
+    version='0.1.31',
     author="chunting liu",
     author_email="jim_liu@symphox.net",
     description=DESCRIPTION,

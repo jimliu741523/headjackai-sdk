@@ -22,11 +22,15 @@ pip install headjackai_sdk
 For more details on design, guidance on setting up a development environment, and SDK usage.
 
 * Headjack AI Platform: <http://www.headjackai.com/>
-* Headjack AI SDK Code: <https://github.com/Headjackai/headjackai_sdk>
+* Headjack AI SDK Code: <https://github.com/jimliu741523/headjackai_sdk>
 
 
 ## History
+0.1.31, readme fix
+
 0.1.3, add data prepcocessing, svd
+
 0.1.22, FastAPI dev
-0.1.21, commit fix
+
+0.1.21, readme fix
 
