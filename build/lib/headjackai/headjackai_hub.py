@@ -1,6 +1,8 @@
 import requests
 import json
 import pandas as pd
+from headjackai.utils import pandas_check
+ 
 
 class headjackai_hub(object):
     '''Establish a connection to headjack-ai core server 
@@ -25,6 +27,7 @@ class headjackai_hub(object):
 
         '''
         
+        pandas_check(data)
         info = {'username':self.username,
                    'pwd':self.pwd,
                    'target_domain':target_domain,
@@ -33,7 +36,7 @@ class headjackai_hub(object):
                   }
         url = self.host+'/api/knowledge_fit' 
         status = requests.post(url, json=info)
-        print(status.json()['status'])
+        return status.json()['status']
                  
     def knowledge_transform(self, data, target_domain, label="", source_domain=None, features_list=None):
         '''Jack-in the headjack features from pretrained knowledge into target domain
@@ -50,6 +53,7 @@ class headjackai_hub(object):
 
         '''
         
+        pandas_check(data)        
         info = {'username':self.username,
                    'pwd':self.pwd,
                    'target_domain':target_domain,
@@ -78,6 +82,7 @@ class headjackai_hub(object):
 
         '''
         
+        pandas_check(data)        
         info = {'username':self.username,
                    'pwd':self.pwd,
                    'target_domain':target_domain,
@@ -106,8 +111,9 @@ class headjackai_hub(object):
         Note:
            the proba_domain please set False if the task is regression.          
         
-        '''        
-
+        '''   
+        
+        pandas_check(data)
         info = {'username':self.username,
                    'pwd':self.pwd,
                    'target_domain':target_domain,
@@ -130,7 +136,7 @@ class headjackai_hub(object):
            public_pool(boolean): check the knowledge pool in the headjack-ai or not        
         
         '''    
-        
+
         if public_pool:
             info = {'username': 'admin'}
         else:
@@ -156,7 +162,7 @@ class headjackai_hub(object):
         
         url = self.host+'/api/knowledgepool_delete' 
         response = requests.post(url, json=info) 
-        print(response.json()['status'])
+        return response.json()['status']
   
 
     def login(self, username, pwd):
@@ -180,9 +186,9 @@ class headjackai_hub(object):
         if self.status:
             self.username = username
             self.pwd = pwd
-            print('Login Successful!')
+            return 'Login Successful!'
         else:
-            print('Please check your username or password')
+            return 'Please check your username or password'
             
 
         

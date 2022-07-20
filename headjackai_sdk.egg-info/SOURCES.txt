@@ -1,9 +1,9 @@
 README.md
 setup.py
 headjackai/__init__.py
-headjackai/__version__.py
 headjackai/headjackai_hub.py
 headjackai/preprocessing.py
+headjackai/utils.py
 headjackai_sdk.egg-info/PKG-INFO
 headjackai_sdk.egg-info/SOURCES.txt
 headjackai_sdk.egg-info/dependency_links.txt

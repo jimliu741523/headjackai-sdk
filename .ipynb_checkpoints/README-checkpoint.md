@@ -15,20 +15,22 @@ To know more about Headjack AI, please contact us to try it out!(jim_liu@symphox
 ## Install
 Install and update using pip:
 ```bash
-pip install headjackai_sdk
+pip install headjackai-sdk
 ```
 
 ## Links
 For more details on design, guidance on setting up a development environment, and SDK usage.
 
 * Headjack AI Platform: <http://www.headjackai.com/>
-* Headjack AI SDK Code: <https://github.com/jimliu741523/headjackai_sdk>
+* Headjack AI SDK Code: <https://github.com/jimliu741523/headjackai-sdk>
 
 
 ## History
+0.1.32, add a feature of data prepcocessing, k_anonymize_clustering_base and readme fix
+
 0.1.31, readme fix
 
-0.1.3, add data prepcocessing, svd
+0.1.3, add a feature of data prepcocessing, svd
 
 0.1.22, FastAPI dev
 
