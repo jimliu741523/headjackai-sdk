@@ -17,6 +17,7 @@ class headjackai_hub(object):
         '''
         self.host = host
 
+        
     def knowledge_fit(self, data, target_domain, label):
         '''Train a knowledge and save on the headjack-ai server 
 
@@ -38,6 +39,7 @@ class headjackai_hub(object):
         status = requests.post(url, json=info)
         return status.json()['status']
                  
+        
     def knowledge_transform(self, data, target_domain, label="", source_domain=None, features_list=None):
         '''Jack-in the headjack features from pretrained knowledge into target domain
 
@@ -67,7 +69,7 @@ class headjackai_hub(object):
         return pd.DataFrame.from_dict(json.loads(status.json()['jackin_df']))
         
 
-    def fit(self, data, target_domain, task_name, label, best_domain=True):
+    def fit(self, data, target_domain, task_name, label, source_list=['all'], best_domain=True):
         '''Train a ml pipeline of lightGBM model with headjack features
         
         Args:
@@ -89,6 +91,7 @@ class headjackai_hub(object):
                    'task_name':task_name,
                    'best_domain':best_domain,                
                    'label':label,
+                   'source_list':json.dumps(source_list),
                    'data':json.dumps(data.to_dict())
                   }
         url = self.host+'/api/fit' 
@@ -165,6 +168,17 @@ class headjackai_hub(object):
         return response.json()['status']
   
 
+    def account_info_check(self):
+        '''Check account information
+                  
+        '''         
+        info = {'username': self.username,
+               'pwd': self.pwd}        
+        url = self.host+'/api/check_user_info' 
+        response = requests.post(url, json=info) 
+        return response.json()
+    
+    
     def login(self, username, pwd):
         '''login a account to headjack-ai server
         

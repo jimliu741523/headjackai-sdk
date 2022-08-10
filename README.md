@@ -26,11 +26,16 @@ For more details on design, guidance on setting up a development environment, an
 
 
 ## History
-0.1.32, add a feature of data prepcocessing, k_anonymize_clustering_base and readme fix
+
+0.1.41, readme fix
+
+0.1.4, add two features of "source_list on fit" and "account_info_check"
+
+0.1.32, add a feature of data prepcocessing, "k_anonymize_clustering_base", and readme fix
 
 0.1.31, readme fix
 
-0.1.3, add a feature of data prepcocessing, svd
+0.1.3, add a feature of data prepcocessing, "svd"
 
 0.1.22, FastAPI dev
 
