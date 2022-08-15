@@ -2,7 +2,8 @@ import requests
 import json
 import pandas as pd
 from headjackai.utils import pandas_check
- 
+from passlib.context import CryptContext
+
 
 class headjackai_hub(object):
     '''Establish a connection to headjack-ai core server 
@@ -16,7 +17,7 @@ class headjackai_hub(object):
 
         '''
         self.host = host
-
+        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
         
     def knowledge_fit(self, data, target_domain, label):
         '''Train a knowledge and save on the headjack-ai server 
@@ -30,7 +31,7 @@ class headjackai_hub(object):
         
         pandas_check(data)
         info = {'username':self.username,
-                   'pwd':self.pwd,
+                   'pwd':self.pwd_context.hash(self.pwd),
                    'target_domain':target_domain,
                    'label':label,
                    'data':json.dumps(data.to_dict())
@@ -57,7 +58,7 @@ class headjackai_hub(object):
         
         pandas_check(data)        
         info = {'username':self.username,
-                   'pwd':self.pwd,
+                   'pwd':self.pwd_context.hash(self.pwd),
                    'target_domain':target_domain,
                    'source_domain':source_domain,                
                    'label':label,
@@ -69,7 +70,7 @@ class headjackai_hub(object):
         return pd.DataFrame.from_dict(json.loads(status.json()['jackin_df']))
         
 
-    def fit(self, data, target_domain, task_name, label, source_list=['all'], best_domain=True):
+    def fit(self, data, target_domain, task_name, label, source_list=['all'], best_domain=True, eval_metric='default'):
         '''Train a ml pipeline of lightGBM model with headjack features
         
         Args:
@@ -77,22 +78,25 @@ class headjackai_hub(object):
            target_domain(str): the name of target knowledge
            task_name(str): the name of the headjack-ai task
            label(str): the name of label columns 
+           eval_metric: evaluation metrics for validation data, a default metric will be assigned according to objective (mae for regression, and f1 for classification)
            best_domain(boolean): use black-box optimazition or best knowledge in the headjack-ai pipeline
            
         Note:
-           the black-box optimazition will take a long time to calculate
+           1. the black-box optimazition will take a long time to calculate
+           2. list of eval_metric: regression of "mae, mse"; classification of "f1, f1_macro, f1_micro, precsion, precision, precision_macro, precision_micro, acc, auc"
 
         '''
         
         pandas_check(data)        
         info = {'username':self.username,
-                   'pwd':self.pwd,
+                   'pwd':self.pwd_context.hash(self.pwd),
                    'target_domain':target_domain,
                    'task_name':task_name,
                    'best_domain':best_domain,                
                    'label':label,
                    'source_list':json.dumps(source_list),
-                   'data':json.dumps(data.to_dict())
+                   'data':json.dumps(data.to_dict()),
+                   'eval_metric': eval_metric
                   }
         url = self.host+'/api/fit' 
         response = requests.post(url, json=info)
@@ -118,7 +122,7 @@ class headjackai_hub(object):
         
         pandas_check(data)
         info = {'username':self.username,
-                   'pwd':self.pwd,
+                   'pwd':self.pwd_context.hash(self.pwd),
                    'target_domain':target_domain,
                    'task_name':task_name,
                    'label':label,
@@ -144,7 +148,7 @@ class headjackai_hub(object):
             info = {'username': 'admin'}
         else:
             info = {'username': self.username,
-                   'pwd': self.pwd}
+                   'pwd': self.pwd_context.hash(self.pwd)}
         
         url = self.host+'/api/knowledgepool_check' 
         response = requests.post(url, json=info) 
@@ -160,7 +164,7 @@ class headjackai_hub(object):
         '''         
         
         info = {'username': self.username,
-               'pwd': self.pwd,
+               'pwd': self.pwd_context.hash(self.pwd),
                'target_domain':target_domain}
         
         url = self.host+'/api/knowledgepool_delete' 
@@ -173,7 +177,7 @@ class headjackai_hub(object):
                   
         '''         
         info = {'username': self.username,
-               'pwd': self.pwd}        
+               'pwd': self.pwd_context.hash(self.pwd)}        
         url = self.host+'/api/check_user_info' 
         response = requests.post(url, json=info) 
         return response.json()
@@ -190,9 +194,8 @@ class headjackai_hub(object):
         
         self.username = username
         self.pwd = pwd  
-        
         info = {'username': username,
-                'pwd': pwd}
+                'pwd': self.pwd_context.hash(pwd)}
         url = self.host+'/api/check_user' 
         response = requests.post(url, json=info) 
         

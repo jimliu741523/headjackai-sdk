@@ -27,6 +27,10 @@ For more details on design, guidance on setting up a development environment, an
 
 ## History
 
+0.1.6 crypt password 
+
+0.1.5, add a feature of "eval_metric"
+
 0.1.41, readme fix
 
 0.1.4, add two features of "source_list on fit" and "account_info_check"
