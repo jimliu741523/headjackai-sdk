@@ -27,6 +27,10 @@ For more details on design, guidance on setting up a development environment, an
 
 ## History
 
+0.1.7 add a features of "ml_type on fit"
+
+0.1.61 readme fix
+
 0.1.6 crypt password 
 
 0.1.5, add a feature of "eval_metric"

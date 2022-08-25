@@ -70,7 +70,7 @@ class headjackai_hub(object):
         return pd.DataFrame.from_dict(json.loads(status.json()['jackin_df']))
         
 
-    def fit(self, data, target_domain, task_name, label, source_list=['all'], best_domain=True, eval_metric='default'):
+    def fit(self, data, target_domain, task_name, label, source_list=['all'], best_domain=True, eval_metric='default',ml_type='lgbm'):
         '''Train a ml pipeline of lightGBM model with headjack features
         
         Args:
@@ -83,7 +83,7 @@ class headjackai_hub(object):
            
         Note:
            1. the black-box optimazition will take a long time to calculate
-           2. list of eval_metric: regression of "mae, mse"; classification of "f1, f1_macro, f1_micro, precsion, precision, precision_macro, precision_micro, acc, auc"
+           2. list of eval_metric: regression of "mae, mse"; classification of "f1, f1_macro, f1_micro,  precision, precision_macro, precision_micro, recall, recall_macro, recall_micro, acc, auc"
 
         '''
         
@@ -95,6 +95,7 @@ class headjackai_hub(object):
                    'best_domain':best_domain,                
                    'label':label,
                    'source_list':json.dumps(source_list),
+                   'ml_type':ml_type,
                    'data':json.dumps(data.to_dict()),
                    'eval_metric': eval_metric
                   }
