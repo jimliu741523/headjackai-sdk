@@ -27,23 +27,25 @@ For more details on design, guidance on setting up a development environment, an
 
 ## History
 
-0.1.7 add a features of "ml_type on fit"
+0.1.80 improve user pipeline of the training stage and add a features of "val_data on fit"
+
+0.1.70 add a features of "ml_type on fit"
 
 0.1.61 readme fix
 
-0.1.6 crypt password 
+0.1.60 crypt password 
 
-0.1.5, add a feature of "eval_metric"
+0.1.50, add a feature of "eval_metric"
 
 0.1.41, readme fix
 
-0.1.4, add two features of "source_list on fit" and "account_info_check"
+0.1.40, add two features of "source_list on fit" and "account_info_check"
 
 0.1.32, add a feature of data prepcocessing, "k_anonymize_clustering_base", and readme fix
 
 0.1.31, readme fix
 
-0.1.3, add a feature of data prepcocessing, "svd"
+0.1.30, add a feature of data prepcocessing, "svd"
 
 0.1.22, FastAPI dev
 

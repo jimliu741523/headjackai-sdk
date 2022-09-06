@@ -19,12 +19,13 @@ class headjackai_hub(object):
         self.host = host
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
         
-    def knowledge_fit(self, data, target_domain, label):
+    def knowledge_fit(self, data, target_domain, task_name, label):
         '''Train a knowledge and save on the headjack-ai server 
 
         Args:
            data(pandas data frame): the data from target domain
            target_domain(str): the name of target knowledge
+           task_name(str): the name of the headjack-ai task
            label(str): the name of label columns 
 
         '''
@@ -34,6 +35,7 @@ class headjackai_hub(object):
                    'pwd':self.pwd_context.hash(self.pwd),
                    'target_domain':target_domain,
                    'label':label,
+                   'task_name':task_name,
                    'data':json.dumps(data.to_dict())
                   }
         url = self.host+'/api/knowledge_fit' 
@@ -70,7 +72,7 @@ class headjackai_hub(object):
         return pd.DataFrame.from_dict(json.loads(status.json()['jackin_df']))
         
 
-    def fit(self, data, target_domain, task_name, label, source_list=['all'], best_domain=True, eval_metric='default',ml_type='lgbm'):
+    def fit(self, data, target_domain, task_name, label, val_data=pd.DataFrame(), source_list=['all'], best_domain=True, eval_metric='default', ml_type='lgbm'):
         '''Train a ml pipeline of lightGBM model with headjack features
         
         Args:
@@ -87,7 +89,9 @@ class headjackai_hub(object):
 
         '''
         
-        pandas_check(data)        
+        pandas_check(data)      
+        pandas_check(val_data)        
+
         info = {'username':self.username,
                    'pwd':self.pwd_context.hash(self.pwd),
                    'target_domain':target_domain,
@@ -96,13 +100,16 @@ class headjackai_hub(object):
                    'label':label,
                    'source_list':json.dumps(source_list),
                    'ml_type':ml_type,
-                   'data':json.dumps(data.to_dict()),
+                   'tr_data':json.dumps(data.to_dict()),
+                   'ts_data':json.dumps(val_data.to_dict()),
                    'eval_metric': eval_metric
                   }
         url = self.host+'/api/fit' 
         response = requests.post(url, json=info)
         
-        return response.json()['features_list'], pd.DataFrame.from_dict(json.loads(response.json()['metrics']))
+        return response.json()['status']
+        
+        
 
     
     def transform(self, data, target_domain, task_name, label, features_list, proba_domain=False):
@@ -184,6 +191,57 @@ class headjackai_hub(object):
         return response.json()
     
     
+    def fit_status_check(self, task_name, process):
+        '''Check fit status
+        
+        Args:
+           task_name(str): the name of the headjack-ai task
+           process(str): the process of the status checking
+           
+        Note:
+            the status checking only for func of "fit" and "knowledge_fit"
+                  
+        ''' 
+        
+        if process=='knowledge_fit' or  process=='fit':
+
+            info = {'username': self.username,
+                   'pwd': self.pwd_context.hash(self.pwd),
+                    'task_name': task_name,
+                    'process':process}
+
+            url = self.host+'/api/fit_status_check' 
+            response = requests.post(url, json=info)              
+            
+            return response.json()
+        else:
+            return 'the status checking only for func of "fit" and "fit_knowledge"'
+        
+
+    def fit_res_return(self, task_name):
+        '''Reutrn fit results
+        
+        Args:
+           task_name(str): the name of the headjack-ai task
+           
+        ''' 
+        
+
+        info = {'username': self.username,
+               'pwd': self.pwd_context.hash(self.pwd),
+                'task_name': task_name}
+
+        url = self.host+'/api/fit_res_return' 
+        response = requests.post(url, json=info) 
+        features_list = response.json()['features_list']
+        metrics = response.json()['metrics']
+        metrics = pd.DataFrame.from_dict(metrics['metrics'])
+        
+
+        return features_list, metrics
+   
+        
+        
     def login(self, username, pwd):
         '''login a account to headjack-ai server
         
