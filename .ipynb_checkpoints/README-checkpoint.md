@@ -27,7 +27,7 @@ For more details on design, guidance on setting up a development environment, an
 
 ## History
 
-0.2.01 fix example
+0.2.11 fix example
 
 0.2.00 refactor AutoKnow
 
